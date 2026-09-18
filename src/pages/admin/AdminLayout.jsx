@@ -196,7 +196,7 @@ export default function AdminLayout() {
 
   useEffect(() => {
     // Check login token
-    const token = sessionStorage.getItem('adminToken');
+    const token = localStorage.getItem('adminToken') || sessionStorage.getItem('adminToken');
     if (token) {
       setIsAuthenticated(true);
     }
@@ -477,6 +477,7 @@ export default function AdminLayout() {
 
   // Logout handler
   const handleLogout = () => {
+    localStorage.removeItem('adminToken');
     sessionStorage.removeItem('adminToken');
     setIsAuthenticated(false);
   };

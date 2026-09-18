@@ -17,6 +17,11 @@ function resolveImageUrls(data) {
       return url;
     }
 
+    // Upgrade http divinecreations to https to avoid mixed content
+    if (url.startsWith('http://divinecreations.co.in')) {
+      return url.replace('http://divinecreations.co.in', 'https://divinecreations.co.in');
+    }
+
     // If it's already an absolute URL (e.g. https://divinecreations.co.in or CDN), preserve it
     if (url.startsWith('http://') || url.startsWith('https://')) {
       return url;
@@ -63,7 +68,7 @@ function resolveImageUrls(data) {
 }
 
 async function request(endpoint, options = {}) {
-  const token = sessionStorage.getItem('adminToken');
+  const token = localStorage.getItem('adminToken') || sessionStorage.getItem('adminToken');
 
   const headers = {
     ...options.headers,

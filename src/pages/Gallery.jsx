@@ -7,28 +7,16 @@ import galleryMobileHero from '../assets/gallerymobile.png';
 import GalleryCTA from '../components/GalleryCTA';
 import GalleryStatsBar from '../components/GalleryStatsBar';
 
-// Import showcasing assets
 import one1 from '../assets/one1.png';
-import one2 from '../assets/one2.png';
-import one3 from '../assets/one3.png';
-import one4 from '../assets/one4.png';
-import one5 from '../assets/one5.png';
-import one6 from '../assets/one6.png';
-import one7 from '../assets/one7.png';
-import one8 from '../assets/one8.png';
-import one9 from '../assets/one9.png';
-import one10 from '../assets/one10.png';
-import one11 from '../assets/one11.png';
-import one12 from '../assets/one12.png';
-import one13 from '../assets/one13.png';
-import one14 from '../assets/one14.png';
-import one15 from '../assets/one15.png';
-import one16 from '../assets/one16.png';
-import one17 from '../assets/one17.png';
-import one18 from '../assets/one18 (1).png';
-import one19 from '../assets/one19.png';
-import one20 from '../assets/one20.png';
-import one21 from '../assets/one21.png';
+import corpGift1 from '../assets/collection_corporate_gift.png';
+import corpGift2 from '../assets/executive_drinkware_set.jpg';
+import corpGift3 from '../assets/leatherette_gifting_embossing.jpg';
+import corpGift4 from '../assets/laser_engraving_corporate_gifting.jpg';
+import corpGift5 from '../assets/metal_etching_trophy_crafting.jpg';
+import corpGift6 from '../assets/a (1).png';
+import corpGift7 from '../assets/a (2).png';
+import corpGift8 from '../assets/a (3).png';
+
 
 const categoriesList = [
   {
@@ -109,26 +97,14 @@ const categoriesList = [
 
 export const galleryItems = [
   { id: 1, category: 'Corporate Gifts', image: one1 },
-  { id: 2, category: 'Drinkware & Flasks', image: one2 },
-  { id: 3, category: 'Gift Sets', image: one3 },
-  { id: 4, category: 'Mementos & Trophies', image: one4 },
-  { id: 5, category: 'Corporate Gifts', image: one5 },
-  { id: 6, category: 'Wall Clocks', image: one6 },
-  { id: 7, category: 'Corporate Gifts', image: one7 },
-  { id: 8, category: 'Corporate Gifts', image: one8 },
-  { id: 9, category: 'Desktop Collection', image: one9 },
-  { id: 10, category: 'Gift Sets', image: one10 },
-  { id: 11, category: 'Wall Clocks', image: one11 },
-  { id: 12, category: 'Mementos & Trophies', image: one12 },
-  { id: 13, category: 'Drinkware & Flasks', image: one13 },
-  { id: 14, category: 'Others', image: one14 },
-  { id: 15, category: 'Drinkware & Flasks', image: one15 },
-  { id: 16, category: 'Corporate Gifts', image: one16 },
-  { id: 17, category: 'Wall Clocks', image: one17 },
-  { id: 18, category: 'Desktop Collection', image: one18 },
-  { id: 19, category: 'Corporate Gifts', image: one19 },
-  { id: 20, category: 'Drinkware & Flasks', image: one20 },
-  { id: 21, category: 'Desktop Collection', image: one21 }
+  { id: 2, category: 'Drinkware & Flasks', image: corpGift2 },
+  { id: 3, category: 'Gift Sets & Notebooks', image: corpGift3 },
+  { id: 4, category: 'Mementos & Trophies', image: corpGift5 },
+  { id: 5, category: 'Corporate Gifts', image: corpGift1 },
+  { id: 6, category: 'Corporate Gifts', image: corpGift4 },
+  { id: 7, category: 'Corporate Gifts', image: corpGift6 },
+  { id: 8, category: 'Drinkware & Flasks', image: corpGift7 },
+  { id: 9, category: 'Gift Sets & Notebooks', image: corpGift8 }
 ];
 
 export default function Gallery() {
