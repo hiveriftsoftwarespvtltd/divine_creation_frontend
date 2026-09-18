@@ -156,8 +156,8 @@ export default function ProductDetail() {
   return (
     <div className="w-full bg-[#FAF9F8] min-h-screen text-slate-900 pb-16">
 
-      {/* Top Header / Breadcrumb Section */}
-      <div className="max-w-[1450px] mx-auto px-4 sm:px-6 lg:px-12 pt-6 pb-4 text-left">
+      {/* Top Header / Breadcrumb Section (Hidden on mobile) */}
+      <div className="hidden md:block max-w-[1450px] mx-auto px-4 sm:px-6 lg:px-12 pt-6 pb-4 text-left">
         <nav className="flex items-center gap-1.5 text-xs sm:text-sm text-slate-500 font-medium overflow-x-auto whitespace-nowrap">
           <Link to="/" className="hover:text-[#EE3A57] transition-colors">Home</Link>
           <span>&rsaquo;</span>
@@ -172,7 +172,7 @@ export default function ProductDetail() {
       </div>
 
       {/* Main 12-Column Grid Layout */}
-      <div className="max-w-[1450px] mx-auto px-4 sm:px-6 lg:px-12">
+      <div className="max-w-[1450px] mx-auto px-4 sm:px-6 lg:px-12 pt-4 md:pt-0">
         <div className="grid grid-cols-1 md:grid-cols-12 lg:grid-cols-12 gap-8 items-start">
 
           {/* ================= COLUMN 1: Image Gallery (col-span-5) ================= */}

@@ -12,11 +12,24 @@ export default function Contact() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [content, setContent] = useState(null);
+  const [socials, setSocials] = useState({
+    facebook: '',
+    instagram: '',
+    youtube: '',
+    whatsapp: '',
+    whatsappNumber: '',
+  });
 
   useEffect(() => {
     api.content.get()
       .then(data => setContent(data))
       .catch(err => console.error('Failed to load contact settings:', err));
+
+    api.socials.get()
+      .then(data => {
+        if (data) setSocials(prev => ({ ...prev, ...data }));
+      })
+      .catch(err => console.error('Failed to load social links in contact:', err));
   }, []);
 
   const handleChange = (e) => {
@@ -41,14 +54,19 @@ export default function Contact() {
       }
       await api.enquiries.create(formData);
 
-      // Construct and open WhatsApp url
-      const waMessage = `Hi! I want to enquire about "${form.subject || 'General Enquiry'}".\n\n*Name:* ${form.name}\n*Phone:* ${form.phone}\n*Email:* ${form.email}\n*Requirement:* ${form.message}`;
-      const waUrl = `https://wa.me/919818946081?text=${encodeURIComponent(waMessage)}`;
+      // Construct and open WhatsApp url if configured
+      if (socials.whatsapp || socials.whatsappNumber) {
+        const waPhone = (socials.whatsappNumber || '').replace(/[^0-9]/g, '');
+        const waMessage = `Hi! I want to enquire about "${form.subject || 'General Enquiry'}".\n\n*Name:* ${form.name}\n*Phone:* ${form.phone}\n*Email:* ${form.email}\n*Requirement:* ${form.message}`;
+        const waUrl = socials.whatsapp
+          ? `${socials.whatsapp}${socials.whatsapp.includes('?') ? '&' : '?'}text=${encodeURIComponent(waMessage)}`
+          : `https://wa.me/${waPhone}?text=${encodeURIComponent(waMessage)}`;
+
+        // Redirect in new tab
+        window.open(waUrl, '_blank');
+      }
 
       setSubmitted(true);
-
-      // Redirect in new tab
-      window.open(waUrl, '_blank');
 
       setTimeout(() => {
         setSubmitted(false);
@@ -130,32 +148,36 @@ export default function Contact() {
             </div>
 
             {/* Card 4: WhatsApp */}
-            <div className="bg-[#faf8f5]/60 border border-slate-100/80 rounded-2xl p-4.5 flex gap-4 items-start shadow-sm text-left">
-              <div className="w-10 h-10 rounded-xl bg-[#0F172A] flex items-center justify-center shrink-0">
-                <svg className="w-5.5 h-5.5 text-[#EE3A57] fill-current" viewBox="0 0 24 24">
-                  <path d="M12.004 0C5.378 0 0 5.373 0 12.001c.002 2.115.552 4.178 1.6 6.002L.057 24l6.155-1.616c1.782.972 3.791 1.488 5.82 1.49h.005c6.627 0 12.003-5.373 12.003-12.001C24.04 5.373 18.631 0 12.004 0zm0 22.02c-1.8 0-3.56-.48-5.11-1.39l-.37-.22-3.79.99 1.01-3.69-.24-.38a9.98 9.98 0 0 1-1.52-5.33c.003-5.52 4.5-10.01 10.02-10.01 2.67 0 5.19 1.04 7.08 2.93a9.91 9.91 0 0 1 2.93 7.09c-.003 5.53-4.5 10.02-10.02 10.02z" />
-                </svg>
+            {(socials.whatsapp || socials.whatsappNumber) && (
+              <div className="bg-[#faf8f5]/60 border border-slate-100/80 rounded-2xl p-4.5 flex gap-4 items-start shadow-sm text-left">
+                <div className="w-10 h-10 rounded-xl bg-[#0F172A] flex items-center justify-center shrink-0">
+                  <svg className="w-5.5 h-5.5 text-[#EE3A57] fill-current" viewBox="0 0 24 24">
+                    <path d="M12.004 0C5.378 0 0 5.373 0 12.001c.002 2.115.552 4.178 1.6 6.002L.057 24l6.155-1.616c1.782.972 3.791 1.488 5.82 1.49h.005c6.627 0 12.003-5.373 12.003-12.001C24.04 5.373 18.631 0 12.004 0zm0 22.02c-1.8 0-3.56-.48-5.11-1.39l-.37-.22-3.79.99 1.01-3.69-.24-.38a9.98 9.98 0 0 1-1.52-5.33c.003-5.52 4.5-10.01 10.02-10.01 2.67 0 5.19 1.04 7.08 2.93a9.91 9.91 0 0 1 2.93 7.09c-.003 5.53-4.5 10.02-10.02 10.02z" />
+                  </svg>
+                </div>
+                <div className="space-y-0.5">
+                  <span className="text-[11px] text-slate-500 font-bold uppercase tracking-wider block">WhatsApp Chat</span>
+                  {socials.whatsappNumber && (
+                    <a
+                      href={socials.whatsapp || `https://wa.me/${socials.whatsappNumber.replace(/[^0-9]/g, '')}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-slate-800 text-[13px] font-bold block hover:text-emerald-600 transition-colors"
+                    >
+                      {socials.whatsappNumber}
+                    </a>
+                  )}
+                  <a
+                    href={socials.whatsapp || `https://wa.me/${(socials.whatsappNumber || '').replace(/[^0-9]/g, '')}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-emerald-600 text-[11px] font-bold hover:underline block"
+                  >
+                    Click to Chat on WhatsApp &rarr;
+                  </a>
+                </div>
               </div>
-              <div className="space-y-0.5">
-                <span className="text-[11px] text-slate-500 font-bold uppercase tracking-wider block">WhatsApp Chat</span>
-                <a
-                  href="https://wa.me/919818946081"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-slate-800 text-[13px] font-bold block hover:text-emerald-600 transition-colors"
-                >
-                  +91 98189 46081
-                </a>
-                <a
-                  href="https://wa.me/919818946081"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-emerald-600 text-[11px] font-bold hover:underline block"
-                >
-                  Click to Chat on WhatsApp &rarr;
-                </a>
-              </div>
-            </div>
+            )}
 
             {/* Card 5: Director & Firm Info */}
             <div className="bg-[#faf8f5]/60 border border-slate-100/80 rounded-2xl p-4.5 flex gap-4 items-start shadow-sm text-left">
@@ -331,53 +353,61 @@ export default function Contact() {
 
               {/* Social Icons Row */}
               <div className="flex items-center gap-3">
-                {/* Facebook */}
-                <a
-                  href="https://www.facebook.com/people/Divine-Creations/61592632652099/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-[#cca040] hover:text-[#cca040] transition-colors"
-                >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                  </svg>
-                </a>
+                {socials.facebook && (
+                  <a
+                    href={socials.facebook}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-[#cca040] hover:text-[#cca040] transition-colors"
+                    title="Facebook"
+                  >
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                    </svg>
+                  </a>
+                )}
 
-                {/* Instagram */}
-                <a
-                  href="https://www.instagram.com/divinecreations.art"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-[#cca040] hover:text-[#cca040] transition-colors"
-                >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-                  </svg>
-                </a>
+                {socials.instagram && (
+                  <a
+                    href={socials.instagram}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-[#cca040] hover:text-[#cca040] transition-colors"
+                    title="Instagram"
+                  >
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                    </svg>
+                  </a>
+                )}
 
-                {/* YouTube */}
-                <a
-                  href="https://www.youtube.com/@divinecreations"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-[#cca040] hover:text-[#cca040] transition-colors"
-                >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <path d="M23.498 6.163a3.003 3.003 0 00-2.11-2.107C19.52 3.5 12 3.5 12 3.5s-7.52 0-9.388.556a3.003 3.003 0 00-2.11 2.107C0 8.029 0 12 0 12s0 3.971.502 5.837a3.003 3.003 0 002.11 2.107C4.48 20.5 12 20.5 12 20.5s7.52 0 9.388-.556a3.003 3.003 0 002.11-2.107C24 15.971 24 12 24 12s0-3.971-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                  </svg>
-                </a>
+                {socials.youtube && (
+                  <a
+                    href={socials.youtube}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-[#cca040] hover:text-[#cca040] transition-colors"
+                    title="YouTube"
+                  >
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path d="M23.498 6.163a3.003 3.003 0 00-2.11-2.107C19.52 3.5 12 3.5 12 3.5s-7.52 0-9.388.556a3.003 3.003 0 00-2.11 2.107C0 8.029 0 12 0 12s0 3.971.502 5.837a3.003 3.003 0 002.11 2.107C4.48 20.5 12 20.5 12 20.5s7.52 0 9.388-.556a3.003 3.003 0 002.11-2.107C24 15.971 24 12 24 12s0-3.971-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                    </svg>
+                  </a>
+                )}
 
-                {/* WhatsApp */}
-                <a
-                  href="https://wa.me/919818946081"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-[#cca040] hover:text-[#cca040] transition-colors"
-                >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.665.989 3.3 1.478 4.957 1.48 5.393 0 9.778-4.383 9.781-9.774a9.686 9.686 0 0 0-2.848-6.903A9.702 9.702 0 0 0 11.998 1.15c-5.396 0-9.786 4.386-9.79 9.778-.002 1.81.488 3.515 1.42 5.068L2.538 21.2l5.109-1.346-.99-.606zM15.1 12.87c-.23-.115-1.354-.668-1.564-.744-.21-.076-.364-.115-.517.115-.153.23-.594.744-.728.897-.134.153-.268.172-.498.057-.23-.115-.97-.358-1.848-1.141-.683-.61-1.145-1.363-1.279-1.593-.134-.23-.014-.354.101-.469.104-.103.23-.268.344-.402.115-.134.153-.23.23-.383.076-.153.038-.287-.019-.402-.057-.115-.517-1.245-.71-1.703-.186-.447-.375-.387-.517-.394-.13-.006-.28-.008-.43-.008a.823.823 0 0 0-.594.278c-.206.23-.785.766-.785 1.867s.8 2.164.912 2.317c.114.153 1.57 2.398 3.805 3.363.53.23 1.05.378 1.408.491.536.17 1.02.146 1.402.089.426-.064 1.354-.553 1.545-1.088.19-.536.19-.995.134-1.088-.057-.096-.21-.153-.44-.268z" />
-                  </svg>
-                </a>
+                {(socials.whatsapp || socials.whatsappNumber) && (
+                  <a
+                    href={socials.whatsapp || `https://wa.me/${(socials.whatsappNumber || '').replace(/[^0-9]/g, '')}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-600 hover:border-[#cca040] hover:text-[#cca040] transition-colors"
+                    title="WhatsApp"
+                  >
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.665.989 3.3 1.478 4.957 1.48 5.393 0 9.778-4.383 9.781-9.774a9.686 9.686 0 0 0-2.848-6.903A9.702 9.702 0 0 0 11.998 1.15c-5.396 0-9.786 4.386-9.79 9.778-.002 1.81.488 3.515 1.42 5.068L2.538 21.2l5.109-1.346-.99-.606zM15.1 12.87c-.23-.115-1.354-.668-1.564-.744-.21-.076-.364-.115-.517.115-.153.23-.594.744-.728.897-.134.153-.268.172-.498.057-.23-.115-.97-.358-1.848-1.141-.683-.61-1.145-1.363-1.279-1.593-.134-.23-.014-.354.101-.469.104-.103.23-.268.344-.402.115-.134.153-.23.23-.383.076-.153.038-.287-.019-.402-.057-.115-.517-1.245-.71-1.703-.186-.447-.375-.387-.517-.394-.13-.006-.28-.008-.43-.008a.823.823 0 0 0-.594.278c-.206.23-.785.766-.785 1.867s.8 2.164.912 2.317c.114.153 1.57 2.398 3.805 3.363.53.23 1.05.378 1.408.491.536.17 1.02.146 1.402.089.426-.064 1.354-.553 1.545-1.088.19-.536.19-.995.134-1.088-.057-.096-.21-.153-.44-.268z" />
+                    </svg>
+                  </a>
+                )}
               </div>
             </div>
 

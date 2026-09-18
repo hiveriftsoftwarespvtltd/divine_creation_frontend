@@ -29,7 +29,7 @@ export default function BlogDetail() {
             title: data.title,
             date: data.date || 'Recent',
             image: data.image || blogImg1,
-            description: data.description || '',
+            description: data.description || data.content || '',
           });
         }
 
@@ -130,20 +130,54 @@ export default function BlogDetail() {
           </div>
         )}
 
-          {/* Navigation Back */}
-          <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-            <Link
-              to="/blogs"
-              className="text-[#EE3A57] text-xs font-bold uppercase tracking-wider hover:underline"
-            >
-              ← Back to All Articles
-            </Link>
-            <Link
-              to="/contact"
-              className="text-slate-600 hover:text-slate-900 text-xs font-bold uppercase tracking-wider"
-            >
-              Contact Studio
-            </Link>
+        {/* Article Description & Content */}
+        <div className="prose prose-slate max-w-none text-slate-700 text-sm sm:text-base leading-relaxed font-normal space-y-4 whitespace-pre-line py-2">
+          {blog.description ? (
+            <p className="text-slate-700 text-sm sm:text-base leading-relaxed font-medium whitespace-pre-line">
+              {blog.description}
+            </p>
+          ) : (
+            <p className="text-slate-500 italic">
+              No description available for this article.
+            </p>
+          )}
+        </div>
+
+        {/* Corporate Consultation CTA Box */}
+        <div className="bg-gradient-to-r from-[#0E0E3B] to-[#1a1a4a] text-white rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md border border-slate-800">
+          <div className="space-y-1.5 text-center sm:text-left">
+            <span className="text-[10px] font-black uppercase tracking-widest text-[#EE3A57] bg-white/10 px-2.5 py-0.5 rounded-full inline-block">
+              Corporate Branding & Manufacturing
+            </span>
+            <h3 className="font-serif text-lg sm:text-xl font-bold">
+              Looking for Custom Gifting Solutions?
+            </h3>
+            <p className="text-slate-300 text-xs sm:text-sm font-medium">
+              Get direct factory quotes for custom laser engraved drinkware, executive gift combos, notebooks, and trophy awards.
+            </p>
+          </div>
+          <Link
+            to="/custom-order"
+            className="bg-gradient-to-r from-[#EE3A57] to-[#2563EB] hover:from-[#d92643] hover:to-[#1d4ed8] text-white text-xs font-black uppercase tracking-widest px-6 py-3 rounded-xl transition-all shadow-md shrink-0 whitespace-nowrap"
+          >
+            Custom Order Quote &rarr;
+          </Link>
+        </div>
+
+        {/* Navigation Back */}
+        <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+          <Link
+            to="/blogs"
+            className="text-[#EE3A57] text-xs font-bold uppercase tracking-wider hover:underline"
+          >
+            ← Back to All Articles
+          </Link>
+          <Link
+            to="/contact"
+            className="text-slate-600 hover:text-slate-900 text-xs font-bold uppercase tracking-wider"
+          >
+            Contact Studio
+          </Link>
         </div>
       </div>
 

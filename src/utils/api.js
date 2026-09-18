@@ -197,4 +197,23 @@ export const api = {
       method: 'DELETE',
     }),
   },
+  about: {
+    get: () => request('/about'),
+    update: (formData) => request('/about', {
+      method: 'PUT',
+      body: formData,
+    }),
+    reset: () => request('/about/reset', {
+      method: 'POST',
+    }),
+  },
+  socials: {
+    get: () => request('/socials'),
+    update: (data) => request('/socials', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  },
 };
+
+

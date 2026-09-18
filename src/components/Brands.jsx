@@ -3,6 +3,7 @@ import { api } from '../utils/api';
 
 export default function Brands() {
   const [brands, setBrands] = useState([]);
+  const [content, setContent] = useState(null);
 
   useEffect(() => {
     api.clients.getAll()
@@ -12,6 +13,14 @@ export default function Brands() {
         }
       })
       .catch(err => console.error("Failed to load marquee brands:", err));
+
+    api.content.get()
+      .then(data => {
+        if (data) {
+          setContent(data);
+        }
+      })
+      .catch(err => console.error("Failed to load brand section content:", err));
   }, []);
 
   if (!brands || brands.length === 0) {
@@ -21,14 +30,51 @@ export default function Brands() {
   // Duplicate the list of brands to make a seamless infinite loop on wide screens
   const duplicatedBrands = [...brands, ...brands, ...brands, ...brands];
 
+  const title = content?.trustedBrandsTitle || 'Trusted by Businesses Across India';
+  const highlight = content?.trustedBrandsHighlight !== undefined ? content.trustedBrandsHighlight : 'Businesses';
+  const subtitle = content?.trustedBrandsSubtitle || '';
+
+  // Render title with highlighted word in gradient if present
+  const renderTitle = () => {
+    if (!highlight || !highlight.trim()) {
+      return title;
+    }
+
+    const trimmedHighlight = highlight.trim();
+    const regex = new RegExp(`(${trimmedHighlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'i');
+    const parts = title.split(regex);
+
+    if (parts.length === 1) {
+      return title;
+    }
+
+    return parts.map((part, index) => {
+      if (part.toLowerCase() === trimmedHighlight.toLowerCase()) {
+        return (
+          <span key={index} className="bg-gradient-to-r from-[#EE3A57] to-[#2563EB] bg-clip-text text-transparent">
+            {part}
+          </span>
+        );
+      }
+      return part;
+    });
+  };
+
   return (
     <section className="bg-[#f5f2eb] py-8 sm:py-10 border-y border-slate-200/60 overflow-hidden relative">
       <div className="max-w-[1750px] mx-auto">
         
-        {/* Section Title */}
-        <h2 className="text-center font-serif text-[11px] sm:text-xs md:text-sm lg:text-2xl font-black uppercase tracking-[0.25em] text-slate-900 mb-8 px-6">
-          Trusted by <span className="bg-gradient-to-r from-[#EE3A57] to-[#2563EB] bg-clip-text text-transparent">Businesses</span> Across India
-        </h2>
+        {/* Dynamic Section Title */}
+        <div className="text-center mb-8 px-6">
+          <h2 className="font-serif text-[11px] sm:text-xs md:text-sm lg:text-2xl font-black uppercase tracking-[0.25em] text-slate-900">
+            {renderTitle()}
+          </h2>
+          {subtitle && (
+            <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-2xl mx-auto mt-2.5 tracking-normal">
+              {subtitle}
+            </p>
+          )}
+        </div>
 
         {/* Infinite Loop Marquee Container */}
         <div className="w-full overflow-hidden flex relative">

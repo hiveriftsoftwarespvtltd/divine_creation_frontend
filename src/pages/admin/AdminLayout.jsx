@@ -10,6 +10,8 @@ import ContentManage from './ContentManage';
 import GalleryManage from './GalleryManage';
 import ClientManage from './ClientManage';
 import BlogManage from './BlogManage';
+import AboutManage from './AboutManage';
+import SocialManage from './SocialManage';
 import { api } from '../../utils/api';
 
 const Toast = Swal.mixin({
@@ -492,7 +494,9 @@ export default function AdminLayout() {
     { id: 'banners', label: 'Sliders & Heroes', iconPath: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' },
     { id: 'blogs', label: 'Articles & Insights', iconPath: 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z' },
     { id: 'gallery', label: 'Gallery Manage', iconPath: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' },
-    { id: 'clients', label: 'Clients Manage', iconPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' }
+    { id: 'clients', label: 'Trusted Brands / Clients', iconPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+    { id: 'about', label: 'About Us CMS', iconPath: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { id: 'socials', label: 'Social Media Links', iconPath: 'M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1' }
   ];
 
   return (
@@ -743,6 +747,8 @@ export default function AdminLayout() {
               clients={clients}
               onAddClient={handleAddClient}
               onDeleteClient={handleDeleteClient}
+              content={content}
+              onSaveContent={handleSaveContent}
             />
           )}
 
@@ -752,6 +758,14 @@ export default function AdminLayout() {
               onSaveContent={handleSaveContent}
               onSaveHero={handleSaveHero}
             />
+          )}
+
+          {activeTab === 'about' && (
+            <AboutManage />
+          )}
+
+          {activeTab === 'socials' && (
+            <SocialManage />
           )}
         </main>
 
