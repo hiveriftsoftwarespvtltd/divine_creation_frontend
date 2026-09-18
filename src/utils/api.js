@@ -1,4 +1,4 @@
-import { BACKEND_URL, BASE_URL } from '../config/config';
+import { BACKEND_URL, BASE_URL, isLocalhost } from '../config/config';
 
 function resolveImageUrls(data) {
   if (!data) return data;
@@ -8,7 +8,21 @@ function resolveImageUrls(data) {
   const formatUrl = (url) => {
     if (typeof url !== 'string' || !url) return url;
 
-    // Handle any upload paths (relative or localhost URLs)
+    // If it's a localhost URL, but we are running on production, convert to live domain
+    if (url.startsWith('http://localhost') || url.startsWith('http://127.0.0.1')) {
+      if (!isLocalhost && backendHost) {
+        const uploadPath = url.substring(url.indexOf('/uploads/'));
+        return `${backendHost}${uploadPath}`;
+      }
+      return url;
+    }
+
+    // If it's already an absolute URL (e.g. https://divinecreations.co.in or CDN), preserve it
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+
+    // Handle relative upload paths (e.g. /uploads/image.png)
     if (url.includes('/uploads/')) {
       const uploadPath = url.substring(url.indexOf('/uploads/'));
       return backendHost ? `${backendHost}${uploadPath}` : uploadPath;
