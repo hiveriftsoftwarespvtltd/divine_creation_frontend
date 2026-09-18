@@ -148,36 +148,32 @@ export default function Contact() {
             </div>
 
             {/* Card 4: WhatsApp */}
-            {(socials.whatsapp || socials.whatsappNumber) && (
-              <div className="bg-[#faf8f5]/60 border border-slate-100/80 rounded-2xl p-4.5 flex gap-4 items-start shadow-sm text-left">
-                <div className="w-10 h-10 rounded-xl bg-[#0F172A] flex items-center justify-center shrink-0">
-                  <svg className="w-5.5 h-5.5 text-[#EE3A57] fill-current" viewBox="0 0 24 24">
-                    <path d="M12.004 0C5.378 0 0 5.373 0 12.001c.002 2.115.552 4.178 1.6 6.002L.057 24l6.155-1.616c1.782.972 3.791 1.488 5.82 1.49h.005c6.627 0 12.003-5.373 12.003-12.001C24.04 5.373 18.631 0 12.004 0zm0 22.02c-1.8 0-3.56-.48-5.11-1.39l-.37-.22-3.79.99 1.01-3.69-.24-.38a9.98 9.98 0 0 1-1.52-5.33c.003-5.52 4.5-10.01 10.02-10.01 2.67 0 5.19 1.04 7.08 2.93a9.91 9.91 0 0 1 2.93 7.09c-.003 5.53-4.5 10.02-10.02 10.02z" />
-                  </svg>
-                </div>
-                <div className="space-y-0.5">
-                  <span className="text-[11px] text-slate-500 font-bold uppercase tracking-wider block">WhatsApp Chat</span>
-                  {socials.whatsappNumber && (
-                    <a
-                      href={socials.whatsapp || `https://wa.me/${socials.whatsappNumber.replace(/[^0-9]/g, '')}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-slate-800 text-[13px] font-bold block hover:text-emerald-600 transition-colors"
-                    >
-                      {socials.whatsappNumber}
-                    </a>
-                  )}
-                  <a
-                    href={socials.whatsapp || `https://wa.me/${(socials.whatsappNumber || '').replace(/[^0-9]/g, '')}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-emerald-600 text-[11px] font-bold hover:underline block"
-                  >
-                    Click to Chat on WhatsApp &rarr;
-                  </a>
-                </div>
+            <div className="bg-[#faf8f5]/60 border border-slate-100/80 rounded-2xl p-4.5 flex gap-4 items-start shadow-sm text-left">
+              <div className="w-10 h-10 rounded-xl bg-[#0F172A] flex items-center justify-center shrink-0">
+                <svg className="w-5.5 h-5.5 text-[#EE3A57] fill-current" viewBox="0 0 24 24">
+                  <path d="M12.004 0C5.378 0 0 5.373 0 12.001c.002 2.115.552 4.178 1.6 6.002L.057 24l6.155-1.616c1.782.972 3.791 1.488 5.82 1.49h.005c6.627 0 12.003-5.373 12.003-12.001C24.04 5.373 18.631 0 12.004 0zm0 22.02c-1.8 0-3.56-.48-5.11-1.39l-.37-.22-3.79.99 1.01-3.69-.24-.38a9.98 9.98 0 0 1-1.52-5.33c.003-5.52 4.5-10.01 10.02-10.01 2.67 0 5.19 1.04 7.08 2.93a9.91 9.91 0 0 1 2.93 7.09c-.003 5.53-4.5 10.02-10.02 10.02z" />
+                </svg>
               </div>
-            )}
+              <div className="space-y-0.5">
+                <span className="text-[11px] text-slate-500 font-bold uppercase tracking-wider block">WhatsApp Chat</span>
+                <a
+                  href={socials.whatsapp || `https://wa.me/${(socials.whatsappNumber || '919818946081').replace(/[^0-9]/g, '')}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-slate-800 text-[13px] font-bold block hover:text-emerald-600 transition-colors"
+                >
+                  {socials.whatsappNumber || '+91 98189 46081'}
+                </a>
+                <a
+                  href={socials.whatsapp || `https://wa.me/${(socials.whatsappNumber || '919818946081').replace(/[^0-9]/g, '')}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-emerald-600 text-[11px] font-bold hover:underline block"
+                >
+                  Click to Chat on WhatsApp &rarr;
+                </a>
+              </div>
+            </div>
 
             {/* Card 5: Director & Firm Info */}
             <div className="bg-[#faf8f5]/60 border border-slate-100/80 rounded-2xl p-4.5 flex gap-4 items-start shadow-sm text-left">
